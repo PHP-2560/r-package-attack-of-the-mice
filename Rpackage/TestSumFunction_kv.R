@@ -10,12 +10,13 @@
 #' @return x+y 
 #' sumTest()
 
-setwd("./Rpackage")
-document()
 
 sumTest2 <- function(x, y){
   return(x+y)
 }
 
-install.packages("Rpackage")
 
+
+install("Rpackage")
+
+?document
