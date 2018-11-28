@@ -10,6 +10,10 @@
 #' @return x+y 
 #' sumTest()
 
+setwd("/Users/kirstenvoorhies/Desktop/RPackage_MightyMice")
+document()
+
 sumTest <- function(x, y){
   return(x+y)
 }
+
