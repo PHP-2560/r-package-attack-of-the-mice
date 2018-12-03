@@ -1,8 +1,8 @@
 Package: TwitterSentiment
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Sentiment Analysis from Twitter
 Version: 0.1.0
-Author: Who wrote it
+Author: Kirsten Voorhies, Nicole Hardy, Camilla Calmasini
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
