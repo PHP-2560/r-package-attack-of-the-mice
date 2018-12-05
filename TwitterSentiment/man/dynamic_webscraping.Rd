@@ -1,5 +1,5 @@
 \name{twitter_dynamic_download}
-\alias{Twitter Dynamic Download}
+\alias{twitter_dynamic_download}
 \title{Webscrapes the Twitter data}
 \usage{
 twitter_dynamic_download(num_scrolls, url, machine = c("windows", "mac", "linux"))
