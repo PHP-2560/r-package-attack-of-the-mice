@@ -12,6 +12,3 @@ sent_scores_plot = function(data, lexicon){
     ylab("Number") +
     ggtitle("Total sentiment scores")
 }
-
-
-
