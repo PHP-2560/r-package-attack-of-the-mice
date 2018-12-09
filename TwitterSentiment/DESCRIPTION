@@ -5,6 +5,19 @@ Version: 0.1.0
 Author: Kirsten Voorhies, Nicole Hardy, Camilla Calmasini
 Maintainer: The package maintainer <nicole_hardy@brown.edu>
 Description: This package dynamically scrapes data from Twitter, cleans and tidies the data, performs a sentiment analysis, and outputs corresponding graphs. 
+Depends: 
+  RSelenium,
+  rvest,
+  httr,
+  progress,
+  rJava,
+  tidytext,
+  dplyr,
+  stringr,
+  ggplot2,
+  wordcloud,
+  waffle,
+  scales
 License: CCO
 Encoding: UTF-8
 LazyData: true
