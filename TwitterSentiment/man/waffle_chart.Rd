@@ -22,5 +22,5 @@ waffle_chart(data, dropwords, lexicon = c("nrc", "bing", "afinn"))
 
 \seealso{\code{\link[waffle]{waffle}}.}
 \examples{
-score_by_tweet(data = df, dropwords = c("trump", "like"), lexicon = "nrc")
+waffle_chart(data = df, dropwords = c("trump", "like"), lexicon = "nrc")
 }
