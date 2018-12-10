@@ -7,13 +7,13 @@ Performs sentiment analysis based on lexicon specified, and then returns a waffl
 }
 
 \usage{
-waffleFun(data, dropwords, lexicon, num_Rows)
+waffleFun(data, lexicon, dropwords, num_Rows)
 }
 
 \arguments{
   \item{data}{A tidy dataframe to run sentiment analysis on and graph.}
-  \item{dropwords}{A character vector of words to exclude from the sentiment analysis and chart.}
   \item{lexicon}{Choice of lexicon that you would like to use for sentiment analysis and chart. Options are NRC, Afinn, or Bing.}
+  \item{dropwords}{A character vector of words to exclude from the sentiment analysis and chart.}
   \item{num_rows}{The number of rows you want for the graphic.}
 }
 
@@ -21,5 +21,5 @@ waffleFun(data, dropwords, lexicon, num_Rows)
 
 \seealso{\code{\link[waffle]{waffle}}.}
 \examples{
-waffleFun(data = df, dropwords = c("trump", "like"), lexicon = "nrc", num_Rows = 20)
+waffleFun(data = df, lexicon = "nrc", dropwords = c("trump", "like"), num_Rows = 20)
 }

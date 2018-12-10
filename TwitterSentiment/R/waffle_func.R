@@ -1,4 +1,4 @@
-waffleFun <- function(data, dropwords, lexicon = c("bing", "afinn", "nrc"), num_Rows)
+waffleFun <- function(data, lexicon = c("bing", "afinn", "nrc"), dropwords, num_Rows)
   {
     lexicon = match.arg(lexicon)
     if(lexicon == "afinn")
