@@ -8,7 +8,7 @@ twitter_sentiment_analysis = function(data, dropwords, lexicon = c("nrc", "bing"
   Sys.setlocale("LC_TIME", "C")  
   
   #Directory to save plots
-  mypath = "C:/Users/Nicole De Los Santos/Documents/PHP2560/in-class-work/week-09-inclass-revenge_of_the_mice/Final Project-DOCKER NOT REQUIRED/Plots"
+  mypath = paste(getwd(), "/Plots", sep = "")
   
   #drops words from the lexicon that could lead to misleading results
   #outputs various graphs
