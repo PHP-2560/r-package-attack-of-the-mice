@@ -15,69 +15,46 @@ ui <- fluidPage(
 
       checkboxGroupInput("checkGroup",
                          label = "Pick which graph you want to output",
-                         choices = list("Top 10 words per sentiments",
-                                        "Word cloud",
-                                        "Number of tweets per day"),
-                         selected = "Top 10 words per sentiments")
+                         choices = list("10 most common words",
+                                        "Positive word cloud",
+                                        "Negative word cloud")
+                         )
     ),
 
     mainPanel(
-      plotOutput("most_common_words"),
-      plotOutput("word_cloud"),
-      plotOutput("tweets_per_day")
+      plotOutput("plot")
     )
   )
 )
 
 server <- function(input, output) {
+  
   dataset = reactive({
       if(input$twitter_acc == "Donald Trump"){
         read.csv("donaldtrump.csv")
       }
     })
-
-  dataset2 = reactive({
-    if(input$twitter_acc == "Donald Trump"){
-      read.csv("donald_trump.csv")
-    }
-  })
-
-  graph1 = reactive({
-    if(input$checkGroup == "Top 10 words per sentiments"){
+  
+  graph = reactive({
+    if(input$checkGroup == "10 most common words"){
       source("most_common_words.R", local = TRUE)
       most_common_words(dataset(), 10)
     }
-  })
-  
-  graph2 = reactive({
-    if(input$checkGroup == "Word cloud"){
+    
+    if(input$checkGroup == "Positive word cloud"){
       source("word_cloud.R", local = TRUE)
-      make_word_cloud(dataset())
+      word_cloud(dataset(), sent = "positive")
+    }
+    
+    if(input$checkGroup == "Negative word cloud"){
+      source("word_cloud.R", local = TRUE)
+      word_cloud(dataset(), sent = "negative")
     }
   })
   
-  
-  output$most_common_words = renderPlot({
-    graph1()
+  output$plot = renderPlot({
+    graph()
   })
-  
-  output$word_cloud = renderPlot({
-    graph2()
-  })
-
-  #if(input$checkGroup == 2){
-    #output$word_cloud = renderPlot({
-     # source("word_cloud.R", local = TRUE)
-     # make_word_cloud(dataset())
-   # })
- # }
-
- # if(input$checkGroup == 3){
-   # output$tweets_per_day = renderPlot({
-     # source("tweets_per_day.R", local = TRUE)
-     # tweets_per_day(dataset2())
-    #})
-  #}
 }
 
 shinyApp(ui = ui, server = server)
