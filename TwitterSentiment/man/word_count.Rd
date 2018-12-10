@@ -1,5 +1,5 @@
-\name{word_count}
-\alias{word_count}
+\name{pullWordCount}
+\alias{pullWordCount}
 \title{Count by Word}
 
 \description{
@@ -7,7 +7,7 @@ Performs a count of all words, and returns a tibble with all words counted, and 
 }
 
 \usage{
-word_count(data, word, lkupWord)
+pullWordCount(data, word, lkupWord)
 }
 
 \arguments{
@@ -20,8 +20,8 @@ word_count(data, word, lkupWord)
 
 \value{A count of number of times lkupWord shows up in the column, and a tibble with the count of all words.}
 
-\seealso{\code{\link[dplyr]{dplyr}}.}
+\seealso{\code{\link[dplyr]{dplyr-package}}.}
 \examples{
-word_count(data = df, word = "word", lkupWord = "like")
+pullWordCount(data = df, word = "word", lkupWord = "like")
 }
 

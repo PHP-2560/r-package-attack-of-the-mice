@@ -17,5 +17,4 @@ top_words_sent = function(data, lexicon){
     labs(title = "Top words per sentiment", x = "Number", y = "Word")+
     facet_wrap(~sentiment, scales = "free") +
     coord_flip()
-
 }

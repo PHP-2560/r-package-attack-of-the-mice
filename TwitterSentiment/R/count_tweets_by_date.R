@@ -16,4 +16,5 @@ count_tweet_by_date = function(data, lexicon, dropwords)
     labs(title = "Count of Tweets By Date", x = "Date", y = "Count") +
     scale_x_date(date_breaks = "7 days") + 
     theme(strip.text = element_text(face = "bold"), axis.title.x = element_text(face = "bold"), axis.text.x=element_text(angle=63, hjust=1, face = "bold"), axis.title.y = element_text(face = "bold"), plot.title = element_text(face = "bold", hjust=0.5))
+  return(graph)
 }

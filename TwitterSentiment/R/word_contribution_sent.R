@@ -1,10 +1,6 @@
 word_contribution_sent = function(data, dropwords, lexicon = c("nrc", "bing"))
 {
-  #Sets the local so that the dates format nicely
-  lct <- Sys.getlocale("LC_TIME"); 
-  Sys.setlocale("LC_TIME", "C")  
-
-  #drops words from the lexicon that could lead to misleading results
+   #drops words from the lexicon that could lead to misleading results
   #outputs various graphs
   if(lexicon == "nrc")
   {
@@ -56,9 +52,6 @@ word_contribution_sent = function(data, dropwords, lexicon = c("nrc", "bing"))
       labs(title = "Words that Contributed the Most to Each Sentiment", x = "Count") +
       theme(strip.text = element_text(face = "bold"), axis.title.x = element_text(face = "bold"), axis.title.y = element_blank(), plot.title = element_text(face = "bold", hjust=0.5))
     
-}
-return(wordContributionGraph)
-  
-  #returns to the local
-  Sys.setlocale("LC_TIME", lct)
+  }
+    return(wordContributionGraph)
 }

@@ -1,9 +1,5 @@
 score_by_tweet = function(data, dropwords, lexicon = c("nrc", "bing", "afinn"))
 {
-  #Sets the local so that the dates format nicely
-  lct <- Sys.getlocale("LC_TIME"); 
-  Sys.setlocale("LC_TIME", "C")  
-
   #drops words from the lexicon that could lead to misleading results
   #outputs various graphs
   if(lexicon == "nrc")
@@ -87,7 +83,5 @@ score_by_tweet = function(data, dropwords, lexicon = c("nrc", "bing", "afinn"))
       scale_y_continuous("Sum of Score") +
       labs(fill = "Sum of Score", title = "Total Score Per Tweet") 
 }
-  #returns to the local
-  Sys.setlocale("LC_TIME", lct)
   return(sentimentTotals)
 }

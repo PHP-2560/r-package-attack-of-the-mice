@@ -1,10 +1,6 @@
 # NRC: count of individual senitments by tweet (% or #)(NRC);
 count_sentiments = function(data, dropwords, lexicon = c("nrc", "bing"))
 {
-  #Sets the local so that the dates format nicely
-  lct <- Sys.getlocale("LC_TIME"); 
-  Sys.setlocale("LC_TIME", "C")  
-
   #drops words from the lexicon that could lead to misleading results
   #outputs various graphs
   if(lexicon == "nrc")
@@ -46,6 +42,5 @@ count_sentiments = function(data, dropwords, lexicon = c("nrc", "bing"))
 
   }
   #returns to the local
-  Sys.setlocale("LC_TIME", lct)
   return(countGraph)
 }
