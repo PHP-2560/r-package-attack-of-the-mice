@@ -5,9 +5,14 @@
 url_example = "https://twitter.com/realDonaldTrump"
 num = 25
 my_machine = "windows"
-my_data =
-  twitter_dynamic_download(url = url_example, num_scrolls = num, machine = my_machine) %>%
-  twitter_tidy_data()
+
+# #needs docker
+# my_data =
+#   twitter_dynamic_download(url = url_example, num_scrolls = num, machine = my_machine) %>%
+#   twitter_tidy_data()
+
+#doesn't need docker
+tidy_data = readRDS('tidy_data.rds')
 
 #words we want to remove from lexicon
 removed_words = c("trump", "grand", "like")
