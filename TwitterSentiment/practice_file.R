@@ -16,6 +16,6 @@ removed_words = c("trump", "grand", "like")
 most_common_words(my_data, 10)
 num_tweets_per_day(my_data, "bing", removed_words)
 tweet_percent(my_data, "nrc", removed_words)
-waffleFun(my_data, removed_words, "nrc", 50)
+waffleFun(my_data, "nrc", removed_words, 50)
 word_count_chart(my_data, "bing", removed_words, "fake", 10)
 
