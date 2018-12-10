@@ -21,24 +21,27 @@ twitter_tidy_data = function(data)
   date_replace = c()
   unit = c()
   
-  #Calculates the actual date of the tweet 
-  for(i in 1:length(time_diff))
+  if(length(time) != 0)
   {
-    if(str_detect(time_diff[i], 'h'))
+    #Calculates the actual date of the tweet 
+    for(i in 1:length(time_diff))
     {
-      date_replace[i] = format(Sys.time() - as.numeric(time[[i]])*60*60, "%h %d")
-    }else if(str_detect(time_diff[i], "m"))
-    {
-      date_replace[i] = format(Sys.time() - as.numeric(time[[i]])*60, "%h %d")
-    }else
-    {
-      date_replace[i] = format(Sys.time() - as.numeric(time[[i]]), "%h %d")
+      if(str_detect(time_diff[i], 'h'))
+      {
+        date_replace[i] = format(Sys.time() - as.numeric(time[[i]])*60*60, "%h %d")
+      }else if(str_detect(time_diff[i], "m"))
+      {
+        date_replace[i] = format(Sys.time() - as.numeric(time[[i]])*60, "%h %d")
+      }else
+      {
+        date_replace[i] = format(Sys.time() - as.numeric(time[[i]]), "%h %d")
+      }
     }
   }
   
   #Capitalizes the first letter so that the date format matches the others and inserts it back into the df
   date_replace = capitalize_first_letter(str_remove_all(date_replace, "\\."))
-  data[(1:length(time_diff)),3] = date_replace
+  data[str_which(data[,3], "[0-9]*+(h|m|s)"),3] = date_replace
   
   #saves a tibble
   data = as_tibble(data) #easier to read format
