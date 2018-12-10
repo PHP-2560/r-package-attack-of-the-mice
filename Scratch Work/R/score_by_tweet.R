@@ -1,5 +1,6 @@
 score_by_tweet = function(data, dropwords, lexicon = c("nrc", "bing", "afinn"))
 {
+  lexicon = match.arg(lexicon)
   #drops words from the lexicon that could lead to misleading results
   #outputs various graphs
   if(lexicon == "nrc")

@@ -1,3 +1,5 @@
+#Create a bar graph of the most common words. 
+#Excludes common, meaningless words on twitter
 most_common_words = function(data, num_words) {
   data %>%
   filter(word != "pic.twitter.com" &

@@ -1,6 +1,7 @@
 #afinn, bing, nrc
-tweet_percent = function(data, lexicon, dropwords)
+tweet_percent = function(data, lexicon = c("bing", "afinn", "nrc"), dropwords)
 {
+  lexicon = match.arg(lexicon)
   new_lexicon <- get_sentiments(lexicon) %>% filter(!word %in% dropwords)
   #Analysis Using given lexicon
   sentiment = 
@@ -11,7 +12,7 @@ tweet_percent = function(data, lexicon, dropwords)
   graph = 
     sentiment %>%
     group_by(date) %>%
-    ggplot(aes(x = as.Date(date, format = "%b %d"))) + geom_bar(aes(y = ..count../sum(..count..))) + coord_flip() + labs(title = "Number of Tweets Per Day", y = "Percent", x = "Date") +
+    ggplot(aes(x = as.Date(date, format = "%b %d"))) + geom_bar(aes(y = ..count../sum(..count..)),fill = "indianred3") + coord_flip() + labs(title = "Number of Tweets Per Day", y = "Percent", x = "Date") +
     theme(axis.title.x = element_text(face = "bold"), axis.title.y = element_text(face = "bold"), plot.title = element_text(face = "bold", hjust=0.5)) +
     scale_y_continuous(labels=scales::percent) 
   return(graph)

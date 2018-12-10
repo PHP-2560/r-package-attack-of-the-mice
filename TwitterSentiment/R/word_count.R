@@ -1,3 +1,5 @@
+#Counts the number of times each word occurs. 
+#Shows the number of times the word lkupWord appears. 
 pullWordCount <- function(data, word, lkupWord){
   dataTest <- data %>%
     group_by(word) %>%
