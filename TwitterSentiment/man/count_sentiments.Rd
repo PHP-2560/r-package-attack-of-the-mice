@@ -11,11 +11,11 @@ count_sentiments(data, dropwords, lexicon = c("nrc", "bing"))
 }
 
 \arguments{
-  \item{data}{A tidy dataframe to run sentiment analysis on}
+  \item{data}{A tidy dataframe to run sentiment analysis on and graph.}
 
-  \item{dropwords}{A vector of words to exclude from the sentiment analysis.}
+  \item{dropwords}{A vector of words to exclude from the sentiment analysis and graph.}
   
-  \item{lexicon}{Choice of lexicon that you would like to use for sentiment analysis. Options are NRC or Bing.}
+  \item{lexicon}{Choice of lexicon that you would like to use for sentiment analysis and graph. Options are NRC or Bing.}
 }
 
 \value{A graph made in ggplot to visualize the data, showing the count of individual sentiments in tweets}

@@ -11,9 +11,9 @@ histogram_of_scores(data, dropwords)
 }
 
 \arguments{
-  \item{data}{A tidy dataframe to run sentiment analysis on}
+  \item{data}{A tidy dataframe to run sentiment analysis on and graph}
 
-  \item{dropwords}{A vector of words to exclude from the sentiment analysis.}
+  \item{dropwords}{A vector of words to exclude from the sentiment analysis and histogram.}
 }
 
 \value{A histogram made in ggplot to visualize the data.}

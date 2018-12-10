@@ -11,7 +11,7 @@ word_count(data, word, lkupWord)
 }
 
 \arguments{
-  \item{data}{A tidy dataframe to run sentiment analysis on}
+  \item{data}{A tidy dataframe to run sentiment analysis on and count.}
 
   \item{word}{Column name where word to lookup is located.}
   
@@ -22,6 +22,6 @@ word_count(data, word, lkupWord)
 
 \seealso{\code{\link[dplyr]{dplyr}}.}
 \examples{
-word_count(data = df, word = "word", lkupWord = "the")
+word_count(data = df, word = "word", lkupWord = "like")
 }
 
