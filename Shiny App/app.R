@@ -12,17 +12,26 @@ ui <- fluidPage(
                   choices = list("Donald Trump",
                                  "Account 2",
                                  "Account 3")),
+      radioButtons("plottype", 
+                   label = "Choose a graph",
+                   choices = c("10 most common words",
+                               "Positive word cloud",
+                               "Negative word cloud")
+      )
 
-      checkboxGroupInput("checkGroup",
-                         label = "Pick which graph you want to output",
-                         choices = list("10 most common words",
-                                        "Positive word cloud",
-                                        "Negative word cloud")
-                         )
+      # checkboxGroupInput("checkGroup",
+      #                    label = "Pick which graph you want to output",
+      #                    choices = list("10 most common words",
+      #                                   "Positive word cloud",
+      #                                   "Negative word cloud"),
+      #                    selected = "10 most common words"
+      #                    )
     ),
-
+    
+    
+    
     mainPanel(
-      plotOutput("plot")
+     plotOutput("plot")
     )
   )
 )
@@ -36,17 +45,13 @@ server <- function(input, output) {
     })
   
   graph = reactive({
-    if(input$checkGroup == "10 most common words"){
+    if(input$plottype == "10 most common words"){
       source("most_common_words.R", local = TRUE)
       most_common_words(dataset(), 10)
-    }
-    
-    if(input$checkGroup == "Positive word cloud"){
+    } else if(input$plottype == "Positive word cloud"){
       source("word_cloud.R", local = TRUE)
       word_cloud(dataset(), sent = "positive")
-    }
-    
-    if(input$checkGroup == "Negative word cloud"){
+    } else if(input$plottype == "Negative word cloud"){
       source("word_cloud.R", local = TRUE)
       word_cloud(dataset(), sent = "negative")
     }
