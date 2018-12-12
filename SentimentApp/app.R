@@ -1,5 +1,7 @@
-
-
+#library(tidytext)
+#library(ggplot2)
+#library(stringr)
+#library(stats)
 
 #3. Create an empty shiny app
 ui <- fluidPage(
@@ -19,15 +21,19 @@ ui <- fluidPage(
                    choices = c("afinn", "bing", "nrc"),
                    selected = "afinn")
       ),
-    mainPanel(
-      plotOutput("plot"))
+    mainPanel(position = "right",
+      plotOutput("plot1"),
+      br(),
+      br(),
+      plotOutput("plot2"),
+      plotOutput("plot3"))
   )
 )
 
 server <- function(input, output) {
   dataset = reactive({
     if(input$twitter_acc == "Donald Trump"){
-      read.csv("donaldtrump.csv")
+      read.csv("dt.csv")
     }
   })
   
@@ -57,12 +63,29 @@ server <- function(input, output) {
     }
   })
   
-    output$plot = renderPlot({
-      graph2()
+  graph3 = reactive({
+    if(input$lexiconChoice == "afinn"){
+      source("score_by_tweet.R", local = TRUE)
+      score_by_tweet(dataset(), dropwords = c("trump", "grand"))
+    } else if(input$lexiconChoice == "nrc"){
+      source("score_by_tweet.R", local = TRUE)
+      score_by_tweet(dataset(), lexicon = "nrc", dropwords = c("trump", "grand"))
+    } else if(input$lexiconChoice == "bing"){
+      source("score_by_tweet.R", local = TRUE)
+      score_by_tweet(dataset(), lexicon = "bing", dropwords = c("trump", "grand"))
+    }
+  })
+  
+    output$plot1 = renderPlot({
+      graph1()
     }
     )
-    
-    
+    output$plot2 = renderPlot({
+      graph2()
+    })
+    output$plot3 = renderPlot({
+      graph3()
+    })
     
   
   }
