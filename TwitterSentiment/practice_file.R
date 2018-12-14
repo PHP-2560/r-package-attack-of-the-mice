@@ -3,13 +3,13 @@
 #---------------------------------------------------------------
 #loads and tidies data
 url_example = "https://twitter.com/realDonaldTrump"
-num = 25
+num = 5
 my_machine = "windows"
 
-# #needs docker
-# my_data =
-#   twitter_dynamic_download(url = url_example, num_scrolls = num, machine = my_machine) %>%
-#   twitter_tidy_data()
+#needs docker
+my_data =
+  twitter_dynamic_download(url = url_example, num_scrolls = num, machine = my_machine) %>%
+  twitter_tidy_data()
 
 #doesn't need docker
 tidy_data = readRDS('tidy_data.rds')

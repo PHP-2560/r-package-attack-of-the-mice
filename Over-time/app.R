@@ -1,50 +1,93 @@
-#
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
+#library(tidytext)
+#library(ggplot2)
+#library(stringr)
+#library(stats)
 
-library(shiny)
-
-# Define UI for application that draws a histogram
+#3. Create an empty shiny app
 ui <- fluidPage(
-   
-   # Application title
-   titlePanel("Over-time Text Analysiss"),
-   
-   # Sidebar with a slider input for number of bins 
-   sidebarLayout(
-      sidebarPanel(
-         sliderInput("bins",
-                     "Number of bins:",
-                     min = 1,
-                     max = 50,
-                     value = 30)
-      ),
+  titlePanel("Sentiment Analysis of Twitter Data"),
+  sidebarLayout(
+    sidebarPanel(
+      helpText("Explore which sentiments are used the most by twitter accounts"),
       
-      # Show a plot of the generated distribution
-      mainPanel(
-         plotOutput("distPlot")
-      )
-   )
+      selectInput("twitter_acc",
+                  label = "Choose a twitter account",
+                  choices = list("Donald Trump",
+                                 "Account 2",
+                                 "Account 3")),
+      
+      radioButtons(inputId = "lexiconChoice", 
+                   label = "Choose a sentiment lexicon", 
+                   choices = c("afinn", "bing", "nrc"),
+                   selected = "afinn")
+    ),
+    mainPanel(position = "right",
+              plotOutput("plot1"),
+              br(),
+              br(),
+              plotOutput("plot2"),
+              plotOutput("plot3"))
+  )
 )
 
-# Define server logic required to draw a histogram
 server <- function(input, output) {
-   
-   output$distPlot <- renderPlot({
-      # generate bins based on input$bins from ui.R
-      x    <- faithful[, 2] 
-      bins <- seq(min(x), max(x), length.out = input$bins + 1)
-      
-      # draw the histogram with the specified number of bins
-      hist(x, breaks = bins, col = 'darkgray', border = 'white')
-   })
+  dataset = reactive({
+    if(input$twitter_acc == "Donald Trump"){
+      readRDS("my_data.rds")
+    }
+  })
+  
+  graph1 = reactive({
+    if(input$lexiconChoice == "afinn"){
+      source("afinn_avg_sentiment_per_day.R", local = TRUE)
+      afinn_avg_sentiment_per_day(dataset(), dropwords = c("trump", "grand"))
+    } else if(input$lexiconChoice == "nrc"){
+      source("count_tweets_by_date.R", local = TRUE)
+      count_tweet_by_date(dataset(), lexicon = "nrc", dropwords = c("trump", "grand"))
+    } else if(input$lexiconChoice == "bing"){
+      source("count_tweets_by_date.R", local = TRUE)
+      count_tweet_by_date(dataset(), lexicon = "bing", dropwords = c("trump", "grand"))
+    }
+  })
+  
+  graph2 = reactive({
+    if(input$lexiconChoice == "afinn"){
+      source("afinn_avg_sentiment_by_tweet.R", local = TRUE)
+      afinn_avg_sentiment_per_tweet(dataset(), dropwords = c("trump", "grand"))
+    } else if(input$lexiconChoice == "nrc"){
+      source("tweet_percentage_by_date.R", local = TRUE)
+      tweet_percentage_by_date(dataset(), lexicon = "nrc", dropwords = c("trump", "grand"))
+    } else if(input$lexiconChoice == "bing"){
+      source("tweet_percentage_by_date.R", local = TRUE)
+      tweet_percentage_by_date(dataset(), lexicon = "bing", dropwords = c("trump", "grand"))
+    }
+  })
+  
+  graph3 = reactive({
+    if(input$lexiconChoice == "afinn"){
+      source("num_tweets_per_day.R", local = TRUE)
+      num_tweets_per_day(dataset(), lexicon = 'afinn', dropwords = c("trump", "grand"))
+    } else if(input$lexiconChoice == "nrc"){
+      source("num_tweets_per_day.R", local = TRUE)
+      num_tweets_per_day(dataset(), lexicon = 'nrc', dropwords = c("trump", "grand"))
+    } else if(input$lexiconChoice == "bing"){
+      source("num_tweets_per_day.R", local = TRUE)
+      num_tweets_per_day(dataset(), lexicon = 'bing', dropwords = c("trump", "grand"))
+    }
+  })
+  
+  output$plot1 = renderPlot({
+    graph1()
+  }
+  )
+  output$plot2 = renderPlot({
+    graph2()
+  })
+  output$plot3 = renderPlot({
+    graph3()
+  })
+  
+  
 }
 
-# Run the application 
 shinyApp(ui = ui, server = server)
-
