@@ -12,7 +12,7 @@ my_machine = "windows"
 #   twitter_tidy_data()
 
 #doesn't need docker
-tidy_data = readRDS('tidy_data.rds')
+my_data = readRDS('tidy_data.rds')
 
 #words we want to remove from lexicon
 removed_words = c("trump", "grand", "like")
