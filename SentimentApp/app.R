@@ -1,18 +1,24 @@
-
+#library(tidytext)
+#library(ggplot2)
+#library(stringr)
+#library(stats)
+#library(waffle)
+#library(scales)
 
 
 #3. Create an empty shiny app
-ui <- fluidPage(
-  titlePanel("Sentiment Analysis of Twitter Data"),
+ui <- fluidPage(tabsetPanel(
+  tabPanel("Sentiment Analysis Tab",
+  titlePanel(h1("Sentiment Analysis of Twitter Data")),
   sidebarLayout(
     sidebarPanel(
       helpText("Explore which sentiments are used the most by twitter accounts"),
-      
+       
       selectInput("twitter_acc",
                   label = "Choose a twitter account",
                   choices = list("Donald Trump",
-                                 "Account 2",
-                                 "Account 3")),
+                                 "Ariana Grande",
+                                 "Chrissy Teigen")),
       
       radioButtons(inputId = "lexiconChoice", 
                    label = "Choose a sentiment lexicon", 
@@ -20,14 +26,18 @@ ui <- fluidPage(
                    selected = "afinn")
       ),
     mainPanel(
-      plotOutput("plot"))
+      tabsetPanel(
+        tabPanel("Waffle", plotOutput("plot1", width = "100%", height = 500)),
+        tabPanel("Scores & Sentiments", plotOutput("plot2", width = "100%", height = 800)),
+        tabPanel("Word Contribution", plotOutput("plot3", width = "100%", height = 1000)))
+      )
   )
 )
-
+))
 server <- function(input, output) {
   dataset = reactive({
     if(input$twitter_acc == "Donald Trump"){
-      read.csv("donaldtrump.csv")
+      read.csv("dt.csv")
     }
   })
   
@@ -57,12 +67,29 @@ server <- function(input, output) {
     }
   })
   
-    output$plot = renderPlot({
-      graph2()
+  graph3 = reactive({
+    if(input$lexiconChoice == "bing"){
+      source("word_contribution_sent.R", local = TRUE)
+      word_contribution_sent(dataset(), dropwords = c("trump", "grand"), lexicon = 'bing')
+    } else if(input$lexiconChoice == "nrc"){
+      source("word_contribution_sent.R", local = TRUE)
+      word_contribution_sent(dataset(), lexicon = "nrc", dropwords = c("trump", "grand"))
+    } else if(input$lexiconChoice == "afinn"){
+      source("score_by_tweet.R", local = TRUE)
+      score_by_tweet(dataset(), lexicon = "bing", dropwords = c("trump", "grand"))
+    }
+  })
+  
+    output$plot1 = renderPlot({
+      graph1()
     }
     )
-    
-    
+    output$plot2 = renderPlot({
+      graph2()
+    })
+    output$plot3 = renderPlot({
+      graph3()
+    })
     
   
   }
