@@ -4,36 +4,38 @@
 #library(stats)
 
 #3. Create an empty shiny app
-ui <- fluidPage(
-  titlePanel("Sentiment Analysis of Twitter Data"),
-  sidebarLayout(
-    sidebarPanel(
-      helpText("Explore which sentiments are used the most by twitter accounts"),
-      
-      selectInput("twitter_acc",
-                  label = "Choose a twitter account",
-                  choices = list("Donald Trump",
-                                 "Account 2",
-                                 "Account 3")),
-      
-      radioButtons(inputId = "lexiconChoice", 
-                   label = "Choose a sentiment lexicon", 
-                   choices = c("afinn", "bing", "nrc"),
-                   selected = "afinn")
-    ),
-    mainPanel(position = "right",
-              plotOutput("plot1"),
-              br(),
-              br(),
-              plotOutput("plot2"),
-              plotOutput("plot3"))
+ui <- fluidPage(tabsetPanel(
+  tabPanel("Sentiment Analysis Tab",
+           titlePanel(h1("Over-Time Analysis of Twitter Data")),
+           sidebarLayout(
+             sidebarPanel(
+               helpText("Explore how the sentiments change over time."),
+               
+               selectInput("twitter_acc",
+                           label = "Choose a twitter account",
+                           choices = list("Donald Trump",
+                                          "Ariana Grande",
+                                          "Chrissy Teigen")),
+               
+               radioButtons(inputId = "lexiconChoice", 
+                            label = "Choose a sentiment lexicon", 
+                            choices = c("afinn", "bing", "nrc"),
+                            selected = "afinn")
+             ),
+             mainPanel(
+               tabsetPanel(
+                 tabPanel("Average & Counts", plotOutput("plot1", width = "100%", height = 500)),
+                 tabPanel("Average and Percentages", plotOutput("plot2", width = "100%", height = 800)),
+                 tabPanel("Number of Tweets Per Day", plotOutput("plot3", width = "100%", height = 1000)))
+             )
+           )
   )
-)
+))
 
 server <- function(input, output) {
   dataset = reactive({
     if(input$twitter_acc == "Donald Trump"){
-      readRDS("my_data.rds")
+      readRDS("tidy_data.rds")
     }
   })
   
