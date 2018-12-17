@@ -1,0 +1,18 @@
+#afinn, bing, nrc
+num_tweets_per_day = function(data, lexicon = c("nrc", "bing", "afinn"), dropwords)
+{
+  lexicon = match.arg(lexicon)
+  lexicon <- get_sentiments(lexicon) %>% filter(!word %in% dropwords)
+  #Analysis of any lexicon
+  sentiment = 
+    data %>%
+    inner_join(lexicon)
+  
+  #Number of tweets per day
+  num_tweets_graph =
+    sentiment %>%
+    group_by(date) %>%
+    ggplot(aes(x = as.Date(date, format = "%b %d"))) + geom_bar(aes(y = ..count..),fill = "indianred3") + coord_flip() + labs(title = "Number of Tweets Per Day", y = "Count", x = "Date") +
+    theme(axis.title.x = element_text(face = "bold"), axis.title.y = element_text(face = "bold"), plot.title = element_text(face = "bold", hjust=0.5))
+  return(num_tweets_graph)
+}
