@@ -10,11 +10,12 @@ most_common_words = function(data, num_words) {
            word != "ig_twitter_share" &
            word != "youtu.be" &
            word != "status" &
-           word != "u.https")%>%
+           word != "u.https" &
+           word != "uhttps") %>%
   anti_join(stop_words) %>%
   count(word, sort = TRUE) %>%
   mutate(word = reorder(word, n)) %>%
-  top_n(num_words)%>%
+  slice(1:num_words)%>%
   ggplot(aes(word, n)) +
     geom_col(fill = "indianred3") +
     labs(title = paste("Top", num_words, "Most Commonly Used Words"), x = "Word", y = "Number of Times Used") +

@@ -6,8 +6,12 @@ library(waffle)
 library(scales)
 library(dplyr)
 library(wordcloud)
+library(shinythemes)
+library(vembedr)
+library(htmltools)
 
-ui <- fluidPage(navbarPage("Tabs",
+ui <- fluidPage(theme = shinytheme("cerulean"), navbarPage("Tabs",
+                                                           
                            #INTRO TAB
                            tabPanel("Introduction",
                                     sidebarPanel(
@@ -41,7 +45,8 @@ ui <- fluidPage(navbarPage("Tabs",
                                                  h5("nrc classifies words as positive or negative, and also various other classifications such as anger, trust, and fear. 
                                                     Words can have multiple classifications. For example, the word absent is classified as negative and sadness.")),
                                         
-                                        tabPanel("Video", h1("Video Tutorial"))))),
+                                        tabPanel("Video", h1("Video Tutorial"),
+                                                 uiOutput("video"))))),
                            
                          ##TAB 1
                          tabPanel("Text analysis",
@@ -53,7 +58,9 @@ ui <- fluidPage(navbarPage("Tabs",
                                                 label = "Choose a twitter account",
                                                 choices = list("Donald Trump" = "1",
                                                                "Chrissy Teigen" = "2",
-                                                               "Ariana Grande"= "3")),
+                                                               "Ariana Grande"= "3", 
+                                                               "Choose your own dataset" = "4")),
+                                    fileInput("file1", "Choose CSV File"),
                                     
                                     radioButtons("plottype",
                                                  label = "Choose a graph",
@@ -74,7 +81,11 @@ ui <- fluidPage(navbarPage("Tabs",
                                                   label = "Choose a twitter account",
                                                   choices = list("Donald Trump" = "1",
                                                                  "Chrissy Teigen" = "2",
-                                                                 "Ariana Grande"= "3")),
+                                                                 "Ariana Grande"= "3", 
+                                                                 "Choose your own dataset" = "4")),
+                                      
+                                      fileInput("file2", "Choose CSV File"),
+                                      
                                       
                                       radioButtons(inputId = "lexiconChoice", 
                                                    label = "Choose a sentiment lexicon", 
@@ -98,7 +109,10 @@ ui <- fluidPage(navbarPage("Tabs",
                                                    label = "Choose a twitter account",
                                                    choices = list("Donald Trump" = "1",
                                                                   "Chrissy Teigen" = "2",
-                                                                  "Ariana Grande"= "3")),
+                                                                  "Ariana Grande"= "3", 
+                                                                  "Choose your own dataset" = "4")),
+                                       
+                                       fileInput("file3", "Choose CSV File"),
                                        
                                        radioButtons(inputId = "lexiconChoice2", 
                                                     label = "Choose a sentiment lexicon", 
@@ -130,97 +144,222 @@ server <- function(input, output) {
     filter(dataset4, as.Date(date, '%b %d') >= input$date_ID1[1], as.Date(date, '%b %d') <= input$date_ID1[2])
   })
   
+  dataset5 = reactive({
+    dataset4 = readRDS(input$file1$datapath)
+    filter(dataset4, as.Date(date, '%b %d') >= input$date_ID1[1], as.Date(date, '%b %d') <= input$date_ID1[2])
+    
+  })
+  
+  dataset6 = reactive({
+    dataset4 = readRDS(input$file2$datapath)
+    filter(dataset4, as.Date(date, '%b %d') >= input$date_ID2[1], as.Date(date, '%b %d') <= input$date_ID2[2])
+  })
+  
+  dataset7 = reactive({
+    dataset4 = readRDS(input$file3$datapath)
+    filter(dataset4, as.Date(date, '%b %d') >= input$date_ID3[1], as.Date(date, '%b %d') <= input$date_ID3[2])
+  })
+  
+  
   #TAB 1 Graphs
   graph = reactive({
-    if(input$plottype == "10 most common words"){
-      source("most_common_words.R", local = TRUE)
-      most_common_words(dataset3(), 10)
-    } else if(input$plottype == "Positive word cloud"){
-      source("word_cloud.R", local = TRUE)
-      word_cloud(dataset3(), sent = "positive")
-    } else if(input$plottype == "Negative word cloud"){
-      source("word_cloud.R", local = TRUE)
-      word_cloud(dataset3(), sent = "negative")
+    if(input$twitter_acc1 == "4")
+    {
+      req(input$file1)
+      if(input$plottype == "10 most common words"){
+        source("most_common_words.R", local = TRUE)
+        most_common_words(dataset5(), num_words = 10)
+      } else if(input$plottype == "Positive word cloud"){
+        source("word_cloud.R", local = TRUE)
+        word_cloud(dataset5(), sent = "positive")
+      } else if(input$plottype == "Negative word cloud"){
+        source("word_cloud.R", local = TRUE)
+        word_cloud(dataset5(), sent = "negative")
+      }
+    }else{
+      if(input$plottype == "10 most common words"){
+        source("most_common_words.R", local = TRUE)
+        most_common_words(dataset3(), num_words = 10)
+      } else if(input$plottype == "Positive word cloud"){
+        source("word_cloud.R", local = TRUE)
+        word_cloud(dataset3(), sent = "positive")
+      } else if(input$plottype == "Negative word cloud"){
+        source("word_cloud.R", local = TRUE)
+        word_cloud(dataset3(), sent = "negative")
+      }
     }
   })
   
   # TAB 3 Graphs
   graph1 = reactive({
-    if(input$lexiconChoice2 == "afinn"){
-      source("afinn_avg_sentiment_per_day.R", local = TRUE)
-      afinn_avg_sentiment_per_day(dataset(), dropwords = c("trump", "grand"))
-    } else if(input$lexiconChoice2 == "nrc"){
-      source("count_tweets_by_date.R", local = TRUE)
-      count_tweet_by_date(dataset(), lexicon = "nrc", dropwords = c("trump", "grand"))
-    } else if(input$lexiconChoice2 == "bing"){
-      source("count_tweets_by_date.R", local = TRUE)
-      count_tweet_by_date(dataset(), lexicon = "bing", dropwords = c("trump", "grand"))
+    if(input$twitter_acc3 == "4")
+    {
+      req(input$file3)
+      if(input$lexiconChoice2 == "afinn"){
+        source("afinn_avg_sentiment_per_day.R", local = TRUE)
+        afinn_avg_sentiment_per_day(dataset7(), dropwords = c("trump", "grand"))
+      } else if(input$lexiconChoice2 == "nrc"){
+        source("count_tweets_by_date.R", local = TRUE)
+        count_tweet_by_date(dataset7(), lexicon = "nrc", dropwords = c("trump", "grand"))
+      } else if(input$lexiconChoice2 == "bing"){
+        source("count_tweets_by_date.R", local = TRUE)
+        count_tweet_by_date(dataset7(), lexicon = "bing", dropwords = c("trump", "grand"))
+      }
+    }else{
+      if(input$lexiconChoice2 == "afinn"){
+        source("afinn_avg_sentiment_per_day.R", local = TRUE)
+        afinn_avg_sentiment_per_day(dataset(), dropwords = c("trump", "grand"))
+      } else if(input$lexiconChoice2 == "nrc"){
+        source("count_tweets_by_date.R", local = TRUE)
+        count_tweet_by_date(dataset(), lexicon = "nrc", dropwords = c("trump", "grand"))
+      } else if(input$lexiconChoice2 == "bing"){
+        source("count_tweets_by_date.R", local = TRUE)
+        count_tweet_by_date(dataset(), lexicon = "bing", dropwords = c("trump", "grand"))
+      }
     }
   })
   
   graph2 = reactive({
-    if(input$lexiconChoice2 == "afinn"){
-      source("afinn_avg_sentiment_by_tweet.R", local = TRUE)
-      afinn_avg_sentiment_per_tweet(dataset(), dropwords = c("trump", "grand"))
-    } else if(input$lexiconChoice2 == "nrc"){
-      source("tweet_percentage_by_date.R", local = TRUE)
-      tweet_percentage_by_date(dataset(), lexicon = "nrc", dropwords = c("trump", "grand"))
-    } else if(input$lexiconChoice2 == "bing"){
-      source("tweet_percentage_by_date.R", local = TRUE)
-      tweet_percentage_by_date(dataset(), lexicon = "bing", dropwords = c("trump", "grand"))
+    if(input$twitter_acc3 == '4')
+    {
+      req(input$file3)
+      if(input$lexiconChoice2 == "afinn"){
+        source("afinn_avg_sentiment_by_tweet.R", local = TRUE)
+        afinn_avg_sentiment_per_tweet(dataset7(), dropwords = c("trump", "grand"))
+      } else if(input$lexiconChoice2 == "nrc"){
+        source("tweet_percentage_by_date.R", local = TRUE)
+        tweet_percentage_by_date(dataset7(), lexicon = "nrc", dropwords = c("trump", "grand"))
+      } else if(input$lexiconChoice2 == "bing"){
+        source("tweet_percentage_by_date.R", local = TRUE)
+        tweet_percentage_by_date(dataset7(), lexicon = "bing", dropwords = c("trump", "grand"))
+      }
+    }else{
+      if(input$lexiconChoice2 == "afinn"){
+        source("afinn_avg_sentiment_by_tweet.R", local = TRUE)
+        afinn_avg_sentiment_per_tweet(dataset(), dropwords = c("trump", "grand"))
+      } else if(input$lexiconChoice2 == "nrc"){
+        source("tweet_percentage_by_date.R", local = TRUE)
+        tweet_percentage_by_date(dataset(), lexicon = "nrc", dropwords = c("trump", "grand"))
+      } else if(input$lexiconChoice2 == "bing"){
+        source("tweet_percentage_by_date.R", local = TRUE)
+        tweet_percentage_by_date(dataset(), lexicon = "bing", dropwords = c("trump", "grand"))
+      }
     }
   })
   
   graph3 = reactive({
-    if(input$lexiconChoice2 == "afinn"){
-      source("num_tweets_per_day.R", local = TRUE)
-      num_tweets_per_day(dataset(), lexicon = 'afinn', dropwords = c("trump", "grand"))
-    } else if(input$lexiconChoice2 == "nrc"){
-      source("num_tweets_per_day.R", local = TRUE)
-      num_tweets_per_day(dataset(), lexicon = 'nrc', dropwords = c("trump", "grand"))
-    } else if(input$lexiconChoice2 == "bing"){
-      source("num_tweets_per_day.R", local = TRUE)
-      num_tweets_per_day(dataset(), lexicon = 'bing', dropwords = c("trump", "grand"))
+    if(input$twitter_acc3 == "4")
+    {
+      req(input$file3)
+      if(input$lexiconChoice2 == "afinn"){
+        source("num_tweets_per_day.R", local = TRUE)
+        num_tweets_per_day(dataset7(), lexicon = 'afinn', dropwords = c("trump", "grand"))
+      } else if(input$lexiconChoice2 == "nrc"){
+        source("num_tweets_per_day.R", local = TRUE)
+        num_tweets_per_day(dataset7(), lexicon = 'nrc', dropwords = c("trump", "grand"))
+      } else if(input$lexiconChoice2 == "bing"){
+        source("num_tweets_per_day.R", local = TRUE)
+        num_tweets_per_day(dataset7(), lexicon = 'bing', dropwords = c("trump", "grand"))
+      }
+    }else{
+      if(input$lexiconChoice2 == "afinn"){
+        source("num_tweets_per_day.R", local = TRUE)
+        num_tweets_per_day(dataset(), lexicon = 'afinn', dropwords = c("trump", "grand"))
+      } else if(input$lexiconChoice2 == "nrc"){
+        source("num_tweets_per_day.R", local = TRUE)
+        num_tweets_per_day(dataset(), lexicon = 'nrc', dropwords = c("trump", "grand"))
+      } else if(input$lexiconChoice2 == "bing"){
+        source("num_tweets_per_day.R", local = TRUE)
+        num_tweets_per_day(dataset(), lexicon = 'bing', dropwords = c("trump", "grand"))
+      }
     }
   })
   
-  #TAB 4 Graphs
+  #TAB 2 Graphs
   graph4 = reactive({
-    if(input$lexiconChoice == "afinn"){
-      source("waffle_func.R", local = TRUE)
-      waffleFun(dataset2(), lexicon = "afinn", dropwords = c("trump", "grand"), num_Rows = 25)
-    } else if(input$lexiconChoice == "nrc"){
-      source("waffle_func.R", local = TRUE)
-      waffleFun(dataset2(), lexicon = "nrc", dropwords = c("trump", "grand"), num_Rows = 50)
-    } else if(input$lexiconChoice == "bing"){
-      source("waffle_func.R", local = TRUE)
-      waffleFun(dataset2(), lexicon = "bing", dropwords = c("trump", "grand"), num_Rows = 25)
-    }
+    if(input$twitter_acc2 == "4")
+    {
+      req(input$file2)
+      if(input$lexiconChoice == "afinn"){
+        source("waffle_func.R", local = TRUE)
+        waffleFun(dataset6(), lexicon = "afinn", dropwords = c("trump", "grand"), num_Rows = 25)
+      } else if(input$lexiconChoice == "nrc"){
+        source("waffle_func.R", local = TRUE)
+        waffleFun(dataset6(), lexicon = "nrc", dropwords = c("trump", "grand"), num_Rows = 50)
+      } else if(input$lexiconChoice == "bing"){
+        source("waffle_func.R", local = TRUE)
+        waffleFun(dataset6(), lexicon = "bing", dropwords = c("trump", "grand"), num_Rows = 25)
+      }
+    }else
+      {
+        if(input$lexiconChoice == "afinn"){
+          source("waffle_func.R", local = TRUE)
+          waffleFun(dataset2(), lexicon = "afinn", dropwords = c("trump", "grand"), num_Rows = 25)
+        } else if(input$lexiconChoice == "nrc"){
+          source("waffle_func.R", local = TRUE)
+          waffleFun(dataset2(), lexicon = "nrc", dropwords = c("trump", "grand"), num_Rows = 50)
+        } else if(input$lexiconChoice == "bing"){
+          source("waffle_func.R", local = TRUE)
+          waffleFun(dataset2(), lexicon = "bing", dropwords = c("trump", "grand"), num_Rows = 25)
+        }
+      }
   })
   
   graph5 = reactive({
-    if(input$lexiconChoice == "afinn"){
-      source("histogram_of_scores.R", local = TRUE)
-      histogram_of_scores(dataset2(), dropwords = c("trump", "grand"))
-    } else if(input$lexiconChoice == "nrc"){
-      source("count_sentiments.R", local = TRUE)
-      count_sentiments(dataset2(), lexicon = "nrc", dropwords = c("trump", "grand"))
-    } else if(input$lexiconChoice == "bing"){
-      source("count_sentiments.R", local = TRUE)
-      count_sentiments(dataset2(), lexicon = "bing", dropwords = c("trump", "grand"))
+    if(input$twitter_acc2 == "4")
+    {
+      req(input$file2)
+      if(input$lexiconChoice == "afinn"){
+        source("histogram_of_scores.R", local = TRUE)
+        histogram_of_scores(dataset6(), dropwords = c("trump", "grand"))
+      } else if(input$lexiconChoice == "nrc"){
+        source("count_sentiments.R", local = TRUE)
+        count_sentiments(dataset6(), lexicon = "nrc", dropwords = c("trump", "grand"))
+      } else if(input$lexiconChoice == "bing"){
+        source("count_sentiments.R", local = TRUE)
+        count_sentiments(dataset6(), lexicon = "bing", dropwords = c("trump", "grand"))
+      }
+    }else
+    {
+      if(input$lexiconChoice == "afinn"){
+        source("histogram_of_scores.R", local = TRUE)
+        histogram_of_scores(dataset2(), dropwords = c("trump", "grand"))
+      } else if(input$lexiconChoice == "nrc"){
+        source("count_sentiments.R", local = TRUE)
+        count_sentiments(dataset2(), lexicon = "nrc", dropwords = c("trump", "grand"))
+      } else if(input$lexiconChoice == "bing"){
+        source("count_sentiments.R", local = TRUE)
+        count_sentiments(dataset2(), lexicon = "bing", dropwords = c("trump", "grand"))
+      }
     }
   })
   
   graph6 = reactive({
-    if(input$lexiconChoice == "bing"){
-      source("word_contribution_sent.R", local = TRUE)
-      word_contribution_sent(dataset2(), dropwords = c("trump", "grand"), lexicon = 'bing')
-    } else if(input$lexiconChoice == "nrc"){
-      source("word_contribution_sent.R", local = TRUE)
-      word_contribution_sent(dataset2(), lexicon = "nrc", dropwords = c("trump", "grand"))
-    } else if(input$lexiconChoice == "afinn"){
-      source("score_by_tweet.R", local = TRUE)
-      score_by_tweet(dataset2(), lexicon = "bing", dropwords = c("trump", "grand"))
+    if(input$twitter_acc2 == "4")
+    {
+      req(input$file2)
+      if(input$lexiconChoice == "bing"){
+        source("word_contribution_sent.R", local = TRUE)
+        word_contribution_sent(dataset6(), dropwords = c("trump", "grand"), lexicon = 'bing')
+      } else if(input$lexiconChoice == "nrc"){
+        source("word_contribution_sent.R", local = TRUE)
+        word_contribution_sent(dataset6(), lexicon = "nrc", dropwords = c("trump", "grand"))
+      } else if(input$lexiconChoice == "afinn"){
+        source("score_by_tweet.R", local = TRUE)
+        score_by_tweet(dataset6(), lexicon = "bing", dropwords = c("trump", "grand"))
+      }
+    }else
+    {
+      if(input$lexiconChoice == "bing"){
+        source("word_contribution_sent.R", local = TRUE)
+        word_contribution_sent(dataset2(), dropwords = c("trump", "grand"), lexicon = 'bing')
+      } else if(input$lexiconChoice == "nrc"){
+        source("word_contribution_sent.R", local = TRUE)
+        word_contribution_sent(dataset2(), lexicon = "nrc", dropwords = c("trump", "grand"))
+      } else if(input$lexiconChoice == "afinn"){
+        source("score_by_tweet.R", local = TRUE)
+        score_by_tweet(dataset2(), lexicon = "bing", dropwords = c("trump", "grand"))
+      }
     }
   })
   
@@ -232,6 +371,7 @@ server <- function(input, output) {
   output$plot4 = renderPlot({graph4()})
   output$plot5 = renderPlot({graph5()})
   output$plot6 = renderPlot({graph6()})
+  output$video = renderUI({embed_youtube('ZRHHOttkM1A')})
 }
 
 #Running app
