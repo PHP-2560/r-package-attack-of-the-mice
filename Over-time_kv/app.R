@@ -29,14 +29,14 @@ ui <- fluidPage(navbarPage("Tabs",
                                                  h3("Within the app you can choose a dataset, and then choose by sentiment which analyses you'd like to see. Sentiment dictionaries are explained 
                                                       within the Dictionaries tab of Introduction.")),
                                         tabPanel("Dictionaries", h1("Dictionaries"),
-                                                 h2("Our sentiment analyses allow you to pick different graphs based on sentiment lexicon. The come from the tidytext library. 
-                                                     Below are brief descriptions for each. Each lexicon joins sentiment by word, where word in the data is each word in each tweet."),
-                                                 h3("afinn:"),
+                                                 h3("Our sentiment analyses allow you to pick different graphs based on sentiment lexicon, which come from the tidytext library."),
+                                                 h3("Each lexicon joins sentiment by word, where word in the data is each word in each tweet. Below are brief descriptions for each:"),
+                                                 h3(strong("afinn:")),
                                                  h4("afinn gives each word a score between -5 and 5. A negative score means the word is more negative, 
                                                      while a positive score means the word is more positive."),
-                                                 h3("bing:"),
+                                                 h3(strong("bing:")),
                                                  h4("bing classifies words as either positive or negative."),
-                                                 h3("nrc:"),
+                                                 h3(strong("nrc:")),
                                                  h4("nrc classifies words as positive or negative, and also various other classifications such as anger, trust, and fear. 
                                                      Words can have multiple classifications. For example, the word absent is classified as negative and sadness.")),
                                         
