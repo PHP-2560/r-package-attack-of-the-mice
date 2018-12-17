@@ -25,16 +25,18 @@ ui <- fluidPage(navbarPage("Tabs",
                                                  h3("We put together a Twitter sentiment analysis. We previously dynamically webscraped the data from Twitter. 
                                                  If you are interested in seeing how we did this, please see our Github."),
                                                  h3("Our loaded datasets are tweets for Donald Trump, Chrissy Teigen, and Ariana Grande. We also included an option to upload your own dataset, 
-                                                 if you would like to run the analyses on your own data.")),
+                                                     if you would like to run the analyses on your own data.")),
                                         tabPanel("Dictionaries", h1("Dictionaries"),
-                                                 h2("Our sentiment analyses allow you to pick different graphs based on sentiment lexicon. Below are brief descriptions for each:"),
-                                                 h3("Afinn:"),
-                                                 h4("Dynamically scrapes tweets from a given twitter url given the following input: the number of times the user wishes to scroll on a virtual browser, 
-                                                    the url of the twitter page, and the machine on which the code is running. The output is in the form of a list."),
-                                                 h3("Bing:"),
-                                                 h4("explain Bing"),
-                                                 h3("NRC:"),
-                                                 h4("explain nrc")),
+                                                 h2("Our sentiment analyses allow you to pick different graphs based on sentiment lexicon. The come from the tidytext library. 
+                                                     Below are brief descriptions for each. Each lexicon joins sentiment by word, where word in the data is each word in each tweet."),
+                                                 h3("afinn:"),
+                                                 h4("afinn gives each word a score between -5 and 5. A negative score means the word is more negative, 
+                                                     while a positive score means the word is more positive."),
+                                                 h3("bing:"),
+                                                 h4("bing classifies words as either positive or negative."),
+                                                 h3("nrc:"),
+                                                 h4("nrc classifies words as positive or negative, and also various other classifications such as anger, trust, and fear. 
+                                                     Words can have multiple classifications. For example, the word absent is classified as negative and sadness.")),
                                         
                                         tabPanel("Video", h1("Video Tutorial")))
 )),
@@ -44,11 +46,11 @@ ui <- fluidPage(navbarPage("Tabs",
                                     sidebarPanel(
                                       helpText("Explore which words are used the most by twitter accounts"),
                                       
-                                      selectInput("twitter_acc",
+                                      selectInput("twitter_acc1",
                                                   label = "Choose a twitter account",
-                                                  choices = list("Donald Trump",
-                                                                 "Chrissy Teigen",
-                                                                 "Ariana Grande")
+                                                  choices = list("Donald Trump" = "1",
+                                                                 "Chrissy Teigen" = "2",
+                                                                 "Ariana Grande"= "3")
                                       ),
                                       radioButtons("plottype",
                                                    label = "Choose a graph",
@@ -112,12 +114,17 @@ ui <- fluidPage(navbarPage("Tabs",
 
 
 server <- function(input, output) {
-  dataset = reactive({
-    if(input$twitter_acc == "Donald Trump"){
-      readRDS("tidy_data.rds")
-    }
-  })
-  
+
+    dataset <- reactive ({
+      dataset3 <- datasets[[as.numeric(input$twitter_acc3)]]
+    })
+    
+    dataset2 <- reactive ({
+      dataset3 <- datasets[[as.numeric(input$twitter_acc2)]]
+    })
+    dataset3 <- reactive ({
+      dataset3 <- datasets[[as.numeric(input$twitter_acc1)]]
+    })
 
 
   #TAB 1 
