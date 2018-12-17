@@ -3,7 +3,7 @@
 #---------------------------------------------------------------
 #loads and tidies data
 url_example = "https://twitter.com/chrissyteigen"
-num = 50
+num = 25
 my_machine = "windows"
 
 #needs docker
