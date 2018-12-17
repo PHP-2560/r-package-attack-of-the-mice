@@ -3,7 +3,14 @@ most_common_words = function(data, num_words) {
   filter(word != "pic.twitter.com" &
            word != "https" &
            word != "http" &
-           word != "twitter.com") %>%
+           word != "twitter.com" &
+           word != "utm_source" &
+           word != "www.instagram.com" &
+           word != "igshid" &
+           word != "ig_twitter_share" &
+           word != "youtu.be" &
+           word != "status" &
+           word != "u.https")%>%
   anti_join(stop_words) %>%
   count(word, sort = TRUE) %>%
   mutate(word = reorder(word, n)) %>%

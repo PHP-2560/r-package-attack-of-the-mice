@@ -55,8 +55,6 @@ ui <- fluidPage(navbarPage("Tabs",
                                                                "Chrissy Teigen" = "2",
                                                                "Ariana Grande"= "3")),
                                     
-                                    # fileInput("upload1", label = "Upload your .rds own file."),
-                                    
                                     radioButtons("plottype",
                                                  label = "Choose a graph",
                                                  choices = c("10 most common words",
@@ -77,8 +75,6 @@ ui <- fluidPage(navbarPage("Tabs",
                                                   choices = list("Donald Trump" = "1",
                                                                  "Chrissy Teigen" = "2",
                                                                  "Ariana Grande"= "3")),
-                                      
-                                      # fileInput("upload2", label = "Upload your .rds own file."),
                                       
                                       radioButtons(inputId = "lexiconChoice", 
                                                    label = "Choose a sentiment lexicon", 
@@ -103,8 +99,6 @@ ui <- fluidPage(navbarPage("Tabs",
                                                    choices = list("Donald Trump" = "1",
                                                                   "Chrissy Teigen" = "2",
                                                                   "Ariana Grande"= "3")),
-                                       
-                                       # fileInput("upload3", label = "Upload your .rds own file."),
                                        
                                        radioButtons(inputId = "lexiconChoice2", 
                                                     label = "Choose a sentiment lexicon", 
