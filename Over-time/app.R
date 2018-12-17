@@ -1,11 +1,11 @@
-#library(tidytext)
-#library(ggplot2)
-#library(stringr)
-#library(stats)
-#library(waffle)
-#library(scales)
-
-datasets = list(readRDS('tidy_trump.rds'), readRDS('tidy_ariana.rds'), readRDS('tidy_chrissy.rds'))
+library(tidytext)
+library(ggplot2)
+library(stringr)
+library(stats)
+library(waffle)
+library(scales)
+library(dplyr)
+library(wordcloud)
 
 #3. Create an empty shiny app
 ui <- fluidPage(navbarPage("Tabs",
@@ -15,6 +15,9 @@ ui <- fluidPage(navbarPage("Tabs",
                                     sidebarPanel(
                                       helpText("Explore which words are used the most by twitter accounts"),
                                       
+                                      # fileInput("upload1", label = "Upload your .rds own file."),
+                                      # tags$div(HTML("<strong>OR</strong>")),
+                                      # 
                                       selectInput("twitter_acc1",
                                                   label = "Choose a twitter account",
                                                   choices = list("Donald Trump" = "1",
@@ -26,7 +29,8 @@ ui <- fluidPage(navbarPage("Tabs",
                                                    choices = c("10 most common words",
                                                                "Positive word cloud",
                                                                "Negative word cloud")
-                                      )
+                                      ),
+                                      dateRangeInput(inputId = "date_ID1", label = "Date Range", start = '2018-12-01', end = '2018-12-15')
                                     ),
                                     
                                     mainPanel(plotOutput("plot"))
@@ -46,11 +50,13 @@ ui <- fluidPage(navbarPage("Tabs",
                                       radioButtons(inputId = "lexiconChoice", 
                                                    label = "Choose a sentiment lexicon", 
                                                    choices = c("afinn", "bing", "nrc"),
-                                                   selected = "afinn")),
+                                                   selected = "afinn"),
+                                      dateRangeInput(inputId = "date_ID2", label = "Date Range", start = '2018-12-01', end = '2018-12-15')),
+                                    
                                     mainPanel(
                                       tabsetPanel(
                                         tabPanel("Waffle", plotOutput("plot4", width = "100%", height = 800)),
-                                        tabPanel("Scores & Sentiments", plotOutput("plot5", width = "100%", height = 800)),
+                                        tabPanel("Scores & Sentiments", plotOutput("plot5", width = "100%", height = 500)),
                                         tabPanel("Word Contribution", plotOutput("plot6", width = "100%", height = 1000)))
                                     )
                            ),
@@ -71,30 +77,32 @@ ui <- fluidPage(navbarPage("Tabs",
                             choices = c("afinn", "bing", "nrc"),
                             selected = "afinn"), 
                
-               dateRangeInput(inputId = "date", label = "Date Range", start = '2018-12-16', end = '2018-12-15')
+               dateRangeInput(inputId = "date_ID3", label = "Date Range", start = '2018-12-01', end = '2018-12-15')
              ),
              mainPanel(
                tabsetPanel(
                  tabPanel("Average & Counts", plotOutput("plot1", width = "100%", height = 500)),
-                 tabPanel("Average and Percentages", plotOutput("plot2", width = "100%", height = 800)),
+                 tabPanel("Average and Percentages", plotOutput("plot2", width = "100%", height = 500)),
                  tabPanel("Number of Tweets Per Day", plotOutput("plot3", width = "100%", height = 1000)))
              )
            )
 ))
   
-# dataset2 = readRDS("tidy_data.rds")
+datasets = list(readRDS('tidy_trump.rds'), readRDS('tidy_ariana.rds'), readRDS('tidy_chrissy.rds'))
 
 server <- function(input, output) {
   
   dataset <- reactive ({
-    dataset3 <- datasets[[as.numeric(input$twitter_acc3)]]
+    dataset4 <- datasets[[as.numeric(input$twitter_acc3)]]
+    filter(dataset4, as.Date(date, '%b %d') >= input$date_ID3[1], as.Date(date, '%b %d') <= input$date_ID3[2])
   })
-
   dataset2 <- reactive ({
-    dataset3 <- datasets[[as.numeric(input$twitter_acc2)]]
+    dataset4 <- datasets[[as.numeric(input$twitter_acc2)]]
+    filter(dataset4, as.Date(date, '%b %d') >= input$date_ID2[1], as.Date(date, '%b %d') <= input$date_ID2[2])
      })
   dataset3 <- reactive ({
-    dataset3 <- datasets[[as.numeric(input$twitter_acc1)]]
+    dataset4 <- datasets[[as.numeric(input$twitter_acc1)]]
+    filter(dataset4, as.Date(date, '%b %d') >= input$date_ID1[1], as.Date(date, '%b %d') <= input$date_ID1[2])
      })
   
   #TAB 1 
@@ -159,13 +167,13 @@ server <- function(input, output) {
   graph4 = reactive({
     if(input$lexiconChoice == "afinn"){
       source("waffle_func.R", local = TRUE)
-      waffleFun(dataset2(), lexicon = "afinn", dropwords = c("trump", "grand"), num_Rows = 50)
+      waffleFun(dataset2(), lexicon = "afinn", dropwords = c("trump", "grand"), num_Rows = 25)
     } else if(input$lexiconChoice == "nrc"){
       source("waffle_func.R", local = TRUE)
-      waffleFun(dataset2(), lexicon = "nrc", dropwords = c("trump", "grand"), num_Rows = 70)
+      waffleFun(dataset2(), lexicon = "nrc", dropwords = c("trump", "grand"), num_Rows = 50)
     } else if(input$lexiconChoice == "bing"){
       source("waffle_func.R", local = TRUE)
-      waffleFun(dataset2(), lexicon = "bing", dropwords = c("trump", "grand"), num_Rows = 50)
+      waffleFun(dataset2(), lexicon = "bing", dropwords = c("trump", "grand"), num_Rows = 25)
     }
   })
   
