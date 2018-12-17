@@ -25,7 +25,9 @@ ui <- fluidPage(navbarPage("Tabs",
                                                  h3("We put together a Twitter sentiment analysis. We previously dynamically webscraped the data from Twitter. 
                                                  If you are interested in seeing how we did this, please see our Github."),
                                                  h3("Our loaded datasets are tweets for Donald Trump, Chrissy Teigen, and Ariana Grande. We also included an option to upload your own dataset, 
-                                                     if you would like to run the analyses on your own data.")),
+                                                     if you would like to run the analyses on your own data."),
+                                                 h3("Within the app you can choose a dataset, and then choose by sentiment which analyses you'd like to see. Sentiment dictionaries are explained 
+                                                      within the Dictionaries tab of Introduction.")),
                                         tabPanel("Dictionaries", h1("Dictionaries"),
                                                  h2("Our sentiment analyses allow you to pick different graphs based on sentiment lexicon. The come from the tidytext library. 
                                                      Below are brief descriptions for each. Each lexicon joins sentiment by word, where word in the data is each word in each tweet."),
