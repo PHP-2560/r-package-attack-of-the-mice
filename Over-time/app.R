@@ -1,14 +1,5 @@
-library(tidytext)
-library(ggplot2)
-library(stringr)
-library(stats)
-library(waffle)
-library(scales)
-library(dplyr)
-library(wordcloud)
-library(shinythemes)
-library(vembedr)
-library(htmltools)
+source('check_packages.R')
+check_packages(c('tidytext', 'ggplot2', 'stringr', 'stats', 'waffle', 'scales', 'dplyr', 'wordcloud', 'shinythemes', 'vembedr', 'htmltools'))
 
 ui <- fluidPage(theme = shinytheme("cerulean"), navbarPage("Tabs",
                                                            
@@ -45,7 +36,7 @@ ui <- fluidPage(theme = shinytheme("cerulean"), navbarPage("Tabs",
                                                  h5("nrc classifies words as positive or negative, and also various other classifications such as anger, trust, and fear. 
                                                     Words can have multiple classifications. For example, the word absent is classified as negative and sadness.")),
                                         
-                                        tabPanel("Video", h1("Video Tutorial"),
+                                        tabPanel("Video", h1("Video Tutorial"), h4('Please open in browswer to view the video. If it does not work, please use this', a(href="https://www.youtube.com/watch?v=WseTDJWrV80", "link")),
                                                  uiOutput("video"))))),
                            
                          ##TAB 1
@@ -371,7 +362,7 @@ server <- function(input, output) {
   output$plot4 = renderPlot({graph4()})
   output$plot5 = renderPlot({graph5()})
   output$plot6 = renderPlot({graph6()})
-  output$video = renderUI({embed_youtube('ZRHHOttkM1A')})
+  output$video = renderUI({embed_youtube("WseTDJWrV80")})
 }
 
 #Running app
