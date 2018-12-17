@@ -11,14 +11,19 @@ ui <- fluidPage(navbarPage("Tabs",
                          label = "Choose a twitter account",
                          choices = list("Donald Trump",
                                         "Chrissy Teigen",
-                                        "Ariana Grande")
-      ),
-      radioButtons("plottype",
-                   label = "Choose a graph",
-                   choices = c("10 most common words",
-                               "Positive word cloud",
-                               "Negative word cloud")
-                   )
+                                        "Ariana Grande",
+                                        "Choose your own dataset")),
+               
+            fileInput("file1", "Upload your own file",
+                        multiple = TRUE,
+                        accept = c("text/csv", "text/comma-separated-values,text/plain", ".csv")),
+             
+             radioButtons("plottype",
+                          label = "Choose a graph",
+                          choices = c("10 most common words",
+                                      "Positive word cloud",
+                                      "Negative word cloud")
+             )
       ),
       
       mainPanel(plotOutput("plot"))
@@ -53,9 +58,12 @@ server <- function(input, output) {
   dataset = reactive({
     if(input$twitter_acc == "Donald Trump"){
       read.csv("donaldtrump.csv")
+    } else if(input$twitter_acc == "Choose your own dataset"){
+      inFile = input$file1
+      read.csv(inFile$datapath, header = TRUE)
     }
   })
- 
+
   #TAB 1 
   graph = reactive({
     if(input$plottype == "10 most common words"){
