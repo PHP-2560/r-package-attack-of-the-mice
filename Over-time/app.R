@@ -36,7 +36,7 @@ ui <- fluidPage(theme = shinytheme("cerulean"), navbarPage("Tabs",
                                                                                  h5("nrc classifies words as positive or negative, and also various other classifications such as anger, trust, and fear. 
                                                                                     Words can have multiple classifications. For example, the word absent is classified as negative and sadness.")),
                                                                         
-                                                                        tabPanel("Video", h1("Video Tutorial"), h4('Please open in browswer to view the video. If it does not work, please use this', a(href="https://www.youtube.com/watch?v=WseTDJWrV80", "link")),
+                                                                        tabPanel("Video", h1("Video Tutorial"), h4('Please open in browswer to view the video. If it does not work, please use this', a(href="https://www.youtube.com/watch?v=AJ-HJOTAY4c", "link")),
                                                                                  uiOutput("video"))))),
                                                            
                                                            ##TAB 1
@@ -362,7 +362,7 @@ server <- function(input, output) {
   output$plot4 = renderPlot({graph4()})
   output$plot5 = renderPlot({graph5()})
   output$plot6 = renderPlot({graph6()})
-  output$video = renderUI({embed_youtube("WseTDJWrV80")})
+  output$video = renderUI({embed_youtube("AJ-HJOTAY4c")})
 }
 
 #Running app
