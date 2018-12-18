@@ -1,14 +1,5 @@
-library(tidytext)
-library(ggplot2)
-library(stringr)
-library(stats)
-library(waffle)
-library(scales)
-library(dplyr)
-library(wordcloud)
-library(shinythemes)
-library(vembedr)
-library(htmltools)
+source('check_packages.R')
+check_packages(c('tidytext', 'ggplot2', 'stringr', 'stats', 'waffle', 'scales', 'dplyr', 'wordcloud', 'shinythemes', 'vembedr', 'htmltools'))
 
 ui <- fluidPage(theme = shinytheme("cerulean"), navbarPage("Tabs",
                                                            
@@ -45,7 +36,7 @@ ui <- fluidPage(theme = shinytheme("cerulean"), navbarPage("Tabs",
                                                  h5("nrc classifies words as positive or negative, and also various other classifications such as anger, trust, and fear. 
                                                     Words can have multiple classifications. For example, the word absent is classified as negative and sadness.")),
                                         
-                                        tabPanel("Video", h1("Video Tutorial"),
+                                        tabPanel("Video", h1("Video Tutorial"), h4('Please open in browswer to view the video. If it does not work, please use this', a(href="https://www.youtube.com/watch?v=AJ-HJOTAY4c", "link")),
                                                  uiOutput("video"))))),
                            
                          ##TAB 1
@@ -60,7 +51,7 @@ ui <- fluidPage(theme = shinytheme("cerulean"), navbarPage("Tabs",
                                                                "Chrissy Teigen" = "2",
                                                                "Ariana Grande"= "3", 
                                                                "Choose your own dataset" = "4")),
-                                    fileInput("file1", "Choose CSV File"),
+                                    fileInput("file1", "Choose RDS File"),
                                     
                                     radioButtons("plottype",
                                                  label = "Choose a graph",
@@ -84,7 +75,7 @@ ui <- fluidPage(theme = shinytheme("cerulean"), navbarPage("Tabs",
                                                                  "Ariana Grande"= "3", 
                                                                  "Choose your own dataset" = "4")),
                                       
-                                      fileInput("file2", "Choose CSV File"),
+                                      fileInput("file2", "Choose RDS File"),
                                       
                                       
                                       radioButtons(inputId = "lexiconChoice", 
@@ -112,7 +103,7 @@ ui <- fluidPage(theme = shinytheme("cerulean"), navbarPage("Tabs",
                                                                   "Ariana Grande"= "3", 
                                                                   "Choose your own dataset" = "4")),
                                        
-                                       fileInput("file3", "Choose CSV File"),
+                                       fileInput("file3", "Choose RDS File"),
                                        
                                        radioButtons(inputId = "lexiconChoice2", 
                                                     label = "Choose a sentiment lexicon", 
@@ -371,7 +362,7 @@ server <- function(input, output) {
   output$plot4 = renderPlot({graph4()})
   output$plot5 = renderPlot({graph5()})
   output$plot6 = renderPlot({graph6()})
-  output$video = renderUI({embed_youtube('ZRHHOttkM1A')})
+  output$video = renderUI({embed_youtube("AJ-HJOTAY4c")})
 }
 
 #Running app

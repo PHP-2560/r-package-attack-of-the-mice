@@ -11,7 +11,9 @@ most_common_words = function(data, num_words) {
            word != "youtu.be" &
            word != "status" &
            word != "u.https" &
-           word != "uhttps") %>%
+           word != "https" &
+           word != "1073340904054890496" &
+           word != "1070751490065735681") %>%
   anti_join(stop_words) %>%
   count(word, sort = TRUE) %>%
   mutate(word = reorder(word, n)) %>%
